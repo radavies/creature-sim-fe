@@ -1,6 +1,7 @@
 body {
   margin: 0;
   font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: rgba(0, 0, 0, 0.87);
 }
 
 /*Grid Container*/
@@ -45,6 +46,17 @@ form .avatar-form-item {
   height: 150px;
 }
 
+form .form-item-center {
+  text-align: center;
+}
+
 /*Other Stuff*/
+
+.skillPoints {
+  background-color: #90caf9;
+  padding: 0.4rem;
+  border-radius: 1rem;
+  font-weight: bold;
+}
 
 /*Docs https://material-ui.com/*/
