@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import md5 from 'md5';
 
 class CreatureAvatar extends Component {
   constructor(props) {
@@ -10,8 +11,6 @@ class CreatureAvatar extends Component {
       creatorName: creatorName,
       showAvatar: showAvatar,
     };
-
-    this.md5 = require('md5');
   }
 
   static getDerivedStateFromProps({ showAvatar, creatureName, creatorName }) {
@@ -27,7 +26,7 @@ class CreatureAvatar extends Component {
     const avatarString = (
       creatureName.trim() + creatorName.trim()
     ).toLowerCase();
-    return this.md5(avatarString);
+    return md5(avatarString);
   }
 
   render() {

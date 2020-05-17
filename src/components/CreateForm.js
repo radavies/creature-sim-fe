@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, TextField, Snackbar } from '@material-ui/core';
+import { Button, TextField } from '@material-ui/core';
 
 import CreatureAvatar from './CreatureAvatar';
 import SliderWithRules from './SliderWithRules';
