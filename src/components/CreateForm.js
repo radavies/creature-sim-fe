@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Button, TextField, Slider, Badge } from '@material-ui/core';
+import { Button, TextField, Snackbar } from '@material-ui/core';
 
 import CreatureAvatar from './CreatureAvatar';
+import SliderWithRules from './SliderWithRules';
 
 class CreateForm extends Component {
   constructor(props) {
@@ -9,19 +10,20 @@ class CreateForm extends Component {
     this.state = {
       creatureName: '',
       creatorName: '',
-      avatarHash: '',
       showAvatar: false,
       updateAvatar: false,
       skillPointsMax: 9,
+      skillPointsMaxLevel: 3,
       skillPointsLeft: 5,
       strengthPoints: 1,
       attackPoints: 1,
       defencePoints: 1,
       speedPoints: 1,
+      creatureNameError: false,
+      creatorNameError: false,
+      creatureErrorHelper: '',
+      creatorErrorHelper: '',
     };
-    this.creatureNameChange = this.creatureNameChange.bind(this);
-    this.creatorNameChange = this.creatorNameChange.bind(this);
-    this.setAvatarState = this.setAvatarState.bind(this);
   }
 
   creatureNameChange(newName) {
@@ -38,6 +40,69 @@ class CreateForm extends Component {
     });
   }
 
+  creatureOnBlur() {
+    this.creatureValidate();
+    this.setAvatarState();
+  }
+
+  creatorOnBlur() {
+    this.creatorValidate();
+    this.setAvatarState();
+  }
+
+  creatureValidate() {
+    const { creatureName } = this.state;
+    let creatureNameError = false;
+    let helperText = '';
+    if (creatureName === '') {
+      creatureNameError = true;
+      helperText = 'Your creature needs a name.';
+    }
+    this.setState({
+      creatureNameError: creatureNameError,
+      creatureErrorHelper: helperText,
+    });
+    return !creatureNameError;
+  }
+
+  creatorValidate() {
+    const { creatorName } = this.state;
+    let creatorNameError = false;
+    let helperText = '';
+    if (creatorName === '') {
+      creatorNameError = true;
+      helperText = 'Please enter your name.';
+    }
+    this.setState({
+      creatorNameError: creatorNameError,
+      creatorErrorHelper: helperText,
+    });
+    return !creatorNameError;
+  }
+
+  skillPointsValidate() {
+    const { skillPointsLeft } = this.state;
+    let skillPointsError = false;
+    if (skillPointsLeft !== 0) {
+      skillPointsError = true;
+    }
+    this.setState({
+      skillPointsError: skillPointsError,
+    });
+    return !skillPointsError;
+  }
+
+  skillPointsValidateRemoveOnly() {
+    const { skillPointsLeft, skillPointsError } = this.state;
+    if (skillPointsError) {
+      if (skillPointsLeft === 0) {
+        this.setState({
+          skillPointsError: false,
+        });
+      }
+    }
+  }
+
   setAvatarState() {
     const { creatureName, creatorName } = this.state;
     let showAvatar = false;
@@ -50,11 +115,8 @@ class CreateForm extends Component {
     });
   }
 
-  valuetext(value) {
-    return value;
-  }
-
-  strengthChange(event, value) {
+  strengthCallBack(value) {
+    this.skillPointsValidateRemoveOnly();
     const {
       skillPointsMax,
       attackPoints,
@@ -62,24 +124,15 @@ class CreateForm extends Component {
       speedPoints,
     } = this.state;
 
-    if (
-      this.checkSkillPoints(
-        value,
-        attackPoints,
-        defencePoints,
-        speedPoints,
-        skillPointsMax
-      )
-    ) {
-      this.setState({
-        strengthPoints: value,
-        skillPointsLeft:
-          skillPointsMax - (value + attackPoints + defencePoints + speedPoints),
-      });
-    }
+    this.setState({
+      strengthPoints: value,
+      skillPointsLeft:
+        skillPointsMax - (value + attackPoints + defencePoints + speedPoints),
+    });
   }
 
-  attackChange(event, value) {
+  attackCallBack(value) {
+    this.skillPointsValidateRemoveOnly();
     const {
       skillPointsMax,
       strengthPoints,
@@ -87,25 +140,15 @@ class CreateForm extends Component {
       speedPoints,
     } = this.state;
 
-    if (
-      this.checkSkillPoints(
-        strengthPoints,
-        value,
-        defencePoints,
-        speedPoints,
-        skillPointsMax
-      )
-    ) {
-      this.setState({
-        attackPoints: value,
-        skillPointsLeft:
-          skillPointsMax -
-          (strengthPoints + value + defencePoints + speedPoints),
-      });
-    }
+    this.setState({
+      attackPoints: value,
+      skillPointsLeft:
+        skillPointsMax - (value + strengthPoints + defencePoints + speedPoints),
+    });
   }
 
-  defenceChange(event, value) {
+  defenceCallBack(value) {
+    this.skillPointsValidateRemoveOnly();
     const {
       skillPointsMax,
       strengthPoints,
@@ -113,25 +156,15 @@ class CreateForm extends Component {
       speedPoints,
     } = this.state;
 
-    if (
-      this.checkSkillPoints(
-        strengthPoints,
-        attackPoints,
-        value,
-        speedPoints,
-        skillPointsMax
-      )
-    ) {
-      this.setState({
-        defencePoints: value,
-        skillPointsLeft:
-          skillPointsMax -
-          (strengthPoints + attackPoints + value + speedPoints),
-      });
-    }
+    this.setState({
+      defencePoints: value,
+      skillPointsLeft:
+        skillPointsMax - (value + strengthPoints + attackPoints + speedPoints),
+    });
   }
 
-  speedChange(event, value) {
+  speedCallBack(value) {
+    this.skillPointsValidateRemoveOnly();
     const {
       skillPointsMax,
       strengthPoints,
@@ -139,38 +172,32 @@ class CreateForm extends Component {
       defencePoints,
     } = this.state;
 
-    if (
-      this.checkSkillPoints(
-        strengthPoints,
-        attackPoints,
-        defencePoints,
-        value,
-        skillPointsMax
-      )
-    ) {
-      this.setState({
-        speedPoints: value,
-        skillPointsLeft:
-          skillPointsMax -
-          (strengthPoints + attackPoints + defencePoints + value),
-      });
-    }
+    this.setState({
+      speedPoints: value,
+      skillPointsLeft:
+        skillPointsMax -
+        (value + strengthPoints + attackPoints + defencePoints),
+    });
   }
 
-  checkSkillPoints(
-    strengthPoints,
-    attackPoints,
-    defencePoints,
-    speedPoints,
-    skillPointsMax
-  ) {
-    if (
-      strengthPoints + attackPoints + defencePoints + speedPoints >
-      skillPointsMax
-    ) {
-      return false;
+  submitForm() {
+    const creatureValid = this.creatureValidate();
+    const creatorValid = this.creatorValidate();
+    const skillPointsValid = this.skillPointsValidate();
+    const valid = creatureValid && creatorValid && skillPointsValid;
+
+    // const {
+    //   creatureName,
+    //   creatorName,
+    //   strengthPoints,
+    //   attackPoints,
+    //   defencePoints,
+    //   speedPoints,
+    // } = this.state;
+
+    if (valid) {
+      console.log('GOOD');
     }
-    return true;
   }
 
   render() {
@@ -184,13 +211,30 @@ class CreateForm extends Component {
       attackPoints,
       defencePoints,
       speedPoints,
+      skillPointsMaxLevel,
+      skillPointsMax,
+      creatureNameError,
+      creatorNameError,
+      creatureErrorHelper,
+      creatorErrorHelper,
+      skillPointsError,
     } = this.state;
+
+    let formError = null;
+    if (skillPointsError) {
+      formError = (
+        <div className="form-item-center grid-form-items formError">
+          Please use all of your available skill points.
+        </div>
+      );
+    }
 
     return (
       <form
         className="grid-middle-one form-container"
         onSubmit={(e) => {
           e.preventDefault();
+          this.submitForm();
         }}
       >
         <CreatureAvatar
@@ -207,7 +251,9 @@ class CreateForm extends Component {
           value={creatureName}
           className="grid-form-items"
           onChange={(e) => this.creatureNameChange(e.target.value)}
-          onBlur={(e) => this.setAvatarState(e)}
+          onBlur={(e) => this.creatureOnBlur(e)}
+          error={creatureNameError}
+          helperText={creatureErrorHelper}
         />
         <TextField
           id="creatorname"
@@ -216,73 +262,71 @@ class CreateForm extends Component {
           value={creatorName}
           className="grid-form-items"
           onChange={(e) => this.creatorNameChange(e.target.value)}
-          onBlur={(e) => this.setAvatarState(e)}
+          onBlur={(e) => this.creatorOnBlur(e)}
+          error={creatorNameError}
+          helperText={creatorErrorHelper}
         />
+        <div className="grid-form-items form-item-center">
+          Max skill level:{' '}
+          <span className="maxLevel">{skillPointsMaxLevel}</span>
+        </div>
         <div className="grid-form-items form-item-center">
           Skill points left to spend:{' '}
           <span className="skillPoints">{skillPointsLeft}</span>
         </div>
-        <label className="grid-form-items" htmlFor="strength">
-          Strength
-          <Slider
-            id="strength"
-            getAriaValueText={this.valuetext}
-            aria-labelledby="discrete-slider"
-            valueLabelDisplay="auto"
-            step={1}
-            marks
-            min={1}
-            max={10}
-            value={strengthPoints}
-            onChange={(e, v) => this.strengthChange(e, v)}
-          />
-        </label>
-        <label className="grid-form-items" htmlFor="attack">
-          Attack
-          <Slider
-            id="attack"
-            getAriaValueText={this.valuetext}
-            aria-labelledby="discrete-slider"
-            valueLabelDisplay="auto"
-            step={1}
-            marks
-            min={1}
-            max={10}
-            value={attackPoints}
-            onChange={(e, v) => this.attackChange(e, v)}
-          />
-        </label>
-        <label className="grid-form-items" htmlFor="defence">
-          Defence
-          <Slider
-            id="defence"
-            getAriaValueText={this.valuetext}
-            aria-labelledby="discrete-slider"
-            valueLabelDisplay="auto"
-            step={1}
-            marks
-            min={1}
-            max={10}
-            value={defencePoints}
-            onChange={(e, v) => this.defenceChange(e, v)}
-          />
-        </label>
-        <label className="grid-form-items" htmlFor="speed">
-          Speed
-          <Slider
-            id="speed"
-            getAriaValueText={this.valuetext}
-            aria-labelledby="discrete-slider"
-            valueLabelDisplay="auto"
-            step={1}
-            marks
-            min={1}
-            max={10}
-            value={speedPoints}
-            onChange={(e, v) => this.speedChange(e, v)}
-          />
-        </label>
-        <Button variant="contained" color="primary" className="grid-form-items">
+
+        {formError}
+
+        <SliderWithRules
+          labelText="Strength"
+          myValue={strengthPoints}
+          otherValueOne={attackPoints}
+          otherValueTwo={defencePoints}
+          otherValueThree={speedPoints}
+          skillPointsMax={skillPointsMax}
+          skillPointsMaxLevel={skillPointsMaxLevel}
+          onUpdateCallBack={(value) => this.strengthCallBack(value)}
+        />
+
+        <SliderWithRules
+          labelText="Attack"
+          myValue={attackPoints}
+          otherValueOne={strengthPoints}
+          otherValueTwo={defencePoints}
+          otherValueThree={speedPoints}
+          skillPointsMax={skillPointsMax}
+          skillPointsMaxLevel={skillPointsMaxLevel}
+          onUpdateCallBack={(value) => this.attackCallBack(value)}
+        />
+
+        <SliderWithRules
+          labelText="Defence"
+          myValue={defencePoints}
+          otherValueOne={strengthPoints}
+          otherValueTwo={attackPoints}
+          otherValueThree={speedPoints}
+          skillPointsMax={skillPointsMax}
+          skillPointsMaxLevel={skillPointsMaxLevel}
+          onUpdateCallBack={(value) => this.defenceCallBack(value)}
+        />
+
+        <SliderWithRules
+          labelText="Speed"
+          myValue={speedPoints}
+          otherValueOne={strengthPoints}
+          otherValueTwo={attackPoints}
+          otherValueThree={defencePoints}
+          skillPointsMax={skillPointsMax}
+          skillPointsMaxLevel={skillPointsMaxLevel}
+          onUpdateCallBack={(value) => this.speedCallBack(value)}
+        />
+
+        <Button
+          variant="contained"
+          color="primary"
+          className="grid-form-items"
+          type="submit"
+        >
           Create {creatureName}
         </Button>
       </form>
