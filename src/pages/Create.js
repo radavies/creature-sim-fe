@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import CreateForm from '../../components/CreateForm';
+import CreateForm from '../components/CreateForm';
 
 class Create extends Component {
   constructor(props) {

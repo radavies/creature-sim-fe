@@ -17,6 +17,17 @@ body {
   grid-template-columns: 1fr;
 }
 
+@media only screen and (max-width: 800px) {
+  .main-container {
+    grid-template-columns: 1fr;
+    margin: 2rem;
+  }
+
+  .form-container {
+    grid-template-columns: 1fr;
+  }
+}
+
 /*Grid Items*/
 
 .grid-center {
@@ -34,7 +45,8 @@ body {
 form .grid-form-items {
   justify-self: left;
   align-self: center;
-  margin: 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
   width: 100%;
 }
 
@@ -48,6 +60,16 @@ form .avatar-form-item {
 
 form .form-item-center {
   text-align: center;
+}
+
+@media only screen and (max-width: 800px) {
+  .grid-center {
+    grid-column-start: 1;
+  }
+
+  .grid-middle-one {
+    grid-column-start: 1;
+  }
 }
 
 /*Other Stuff*/

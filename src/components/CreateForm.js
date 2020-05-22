@@ -1,8 +1,13 @@
-import React, { Component } from 'react';
-import { Button, TextField } from '@material-ui/core';
+import React, { Component, Fragment } from 'react';
+import { Button, TextField, CircularProgress } from '@material-ui/core';
+import { navigate } from '@reach/router';
+
+import CreateCreature from '../utils/Network';
 
 import CreatureAvatar from './CreatureAvatar';
 import SliderWithRules from './SliderWithRules';
+import SimpleSnackbar from './SimpleSnackbar';
+import SnackbarProvider from './SnackbarProvider';
 
 class CreateForm extends Component {
   constructor(props) {
@@ -23,7 +28,12 @@ class CreateForm extends Component {
       creatorNameError: false,
       creatureErrorHelper: '',
       creatorErrorHelper: '',
+      formLoading: false,
+      networkError: false,
     };
+    this.submitFormSuccess = this.submitFormSuccess.bind(this);
+    this.submitFormError = this.submitFormError.bind(this);
+    this.closeCallback = this.closeCallback.bind(this);
   }
 
   creatureNameChange(newName) {
@@ -186,18 +196,41 @@ class CreateForm extends Component {
     const skillPointsValid = this.skillPointsValidate();
     const valid = creatureValid && creatorValid && skillPointsValid;
 
-    // const {
-    //   creatureName,
-    //   creatorName,
-    //   strengthPoints,
-    //   attackPoints,
-    //   defencePoints,
-    //   speedPoints,
-    // } = this.state;
+    const {
+      creatureName,
+      creatorName,
+      strengthPoints,
+      attackPoints,
+      defencePoints,
+      speedPoints,
+    } = this.state;
 
     if (valid) {
-      console.log('GOOD');
+      this.setState({ formLoading: true, networkError: false });
+
+      CreateCreature(
+        creatureName,
+        creatorName,
+        strengthPoints,
+        attackPoints,
+        defencePoints,
+        speedPoints,
+        this.submitFormSuccess,
+        this.submitFormError
+      );
     }
+  }
+
+  submitFormSuccess(response) {
+    navigate(`/world?creature=${response.data}`);
+  }
+
+  submitFormError() {
+    this.setState({ formLoading: false, networkError: true });
+  }
+
+  closeCallback() {
+    this.setState({ networkError: false });
   }
 
   render() {
@@ -218,118 +251,129 @@ class CreateForm extends Component {
       creatureErrorHelper,
       creatorErrorHelper,
       skillPointsError,
+      formLoading,
+      networkError,
     } = this.state;
 
-    let formError = null;
-    if (skillPointsError) {
-      formError = (
-        <div className="form-item-center grid-form-items formError">
-          Please use all of your available skill points.
-        </div>
-      );
-    }
-
     return (
-      <form
-        className="grid-middle-one form-container"
-        onSubmit={(e) => {
-          e.preventDefault();
-          this.submitForm();
-        }}
-      >
-        <CreatureAvatar
-          showAvatar={showAvatar}
-          updateAvatar={updateAvatar}
-          creatureName={creatureName}
-          creatorName={creatorName}
-        />
-
-        <TextField
-          id="creaturename"
-          label="Creature Name"
-          variant="outlined"
-          value={creatureName}
-          className="grid-form-items"
-          onChange={(e) => this.creatureNameChange(e.target.value)}
-          onBlur={(e) => this.creatureOnBlur(e)}
-          error={creatureNameError}
-          helperText={creatureErrorHelper}
-        />
-        <TextField
-          id="creatorname"
-          label="Your Name"
-          variant="outlined"
-          value={creatorName}
-          className="grid-form-items"
-          onChange={(e) => this.creatorNameChange(e.target.value)}
-          onBlur={(e) => this.creatorOnBlur(e)}
-          error={creatorNameError}
-          helperText={creatorErrorHelper}
-        />
-        <div className="grid-form-items form-item-center">
-          Max skill level:{' '}
-          <span className="maxLevel">{skillPointsMaxLevel}</span>
-        </div>
-        <div className="grid-form-items form-item-center">
-          Skill points left to spend:{' '}
-          <span className="skillPoints">{skillPointsLeft}</span>
-        </div>
-
-        {formError}
-
-        <SliderWithRules
-          labelText="Strength"
-          myValue={strengthPoints}
-          otherValueOne={attackPoints}
-          otherValueTwo={defencePoints}
-          otherValueThree={speedPoints}
-          skillPointsMax={skillPointsMax}
-          skillPointsMaxLevel={skillPointsMaxLevel}
-          onUpdateCallBack={(value) => this.strengthCallBack(value)}
-        />
-
-        <SliderWithRules
-          labelText="Attack"
-          myValue={attackPoints}
-          otherValueOne={strengthPoints}
-          otherValueTwo={defencePoints}
-          otherValueThree={speedPoints}
-          skillPointsMax={skillPointsMax}
-          skillPointsMaxLevel={skillPointsMaxLevel}
-          onUpdateCallBack={(value) => this.attackCallBack(value)}
-        />
-
-        <SliderWithRules
-          labelText="Defence"
-          myValue={defencePoints}
-          otherValueOne={strengthPoints}
-          otherValueTwo={attackPoints}
-          otherValueThree={speedPoints}
-          skillPointsMax={skillPointsMax}
-          skillPointsMaxLevel={skillPointsMaxLevel}
-          onUpdateCallBack={(value) => this.defenceCallBack(value)}
-        />
-
-        <SliderWithRules
-          labelText="Speed"
-          myValue={speedPoints}
-          otherValueOne={strengthPoints}
-          otherValueTwo={attackPoints}
-          otherValueThree={defencePoints}
-          skillPointsMax={skillPointsMax}
-          skillPointsMaxLevel={skillPointsMaxLevel}
-          onUpdateCallBack={(value) => this.speedCallBack(value)}
-        />
-
-        <Button
-          variant="contained"
-          color="primary"
-          className="grid-form-items"
-          type="submit"
+      <Fragment>
+        <SnackbarProvider.Provider
+          value={{ isOpen: networkError, closeCallback: this.closeCallback }}
         >
-          Create {creatureName}
-        </Button>
-      </form>
+          <SimpleSnackbar />
+        </SnackbarProvider.Provider>
+        <form
+          className="grid-middle-one form-container"
+          onSubmit={(e) => {
+            e.preventDefault();
+            this.submitForm();
+          }}
+        >
+          <CreatureAvatar
+            showAvatar={showAvatar}
+            updateAvatar={updateAvatar}
+            creatureName={creatureName}
+            creatorName={creatorName}
+          />
+
+          <TextField
+            id="creaturename"
+            label="Creature Name"
+            variant="outlined"
+            value={creatureName}
+            className="grid-form-items"
+            onChange={(e) => this.creatureNameChange(e.target.value)}
+            onBlur={(e) => this.creatureOnBlur(e)}
+            error={creatureNameError}
+            helperText={creatureErrorHelper}
+          />
+          <TextField
+            id="creatorname"
+            label="Your Name"
+            variant="outlined"
+            value={creatorName}
+            className="grid-form-items"
+            onChange={(e) => this.creatorNameChange(e.target.value)}
+            onBlur={(e) => this.creatorOnBlur(e)}
+            error={creatorNameError}
+            helperText={creatorErrorHelper}
+          />
+          <div className="grid-form-items form-item-center">
+            Max skill level:{' '}
+            <span className="maxLevel">{skillPointsMaxLevel}</span>
+          </div>
+          <div className="grid-form-items form-item-center">
+            Skill points left to spend:{' '}
+            <span className="skillPoints">{skillPointsLeft}</span>
+          </div>
+
+          {skillPointsError && (
+            <div className="form-item-center grid-form-items formError">
+              Please use all of your available skill points.
+            </div>
+          )}
+
+          <SliderWithRules
+            labelText="Strength"
+            myValue={strengthPoints}
+            otherValueOne={attackPoints}
+            otherValueTwo={defencePoints}
+            otherValueThree={speedPoints}
+            skillPointsMax={skillPointsMax}
+            skillPointsMaxLevel={skillPointsMaxLevel}
+            onUpdateCallBack={(value) => this.strengthCallBack(value)}
+          />
+
+          <SliderWithRules
+            labelText="Attack"
+            myValue={attackPoints}
+            otherValueOne={strengthPoints}
+            otherValueTwo={defencePoints}
+            otherValueThree={speedPoints}
+            skillPointsMax={skillPointsMax}
+            skillPointsMaxLevel={skillPointsMaxLevel}
+            onUpdateCallBack={(value) => this.attackCallBack(value)}
+          />
+
+          <SliderWithRules
+            labelText="Defence"
+            myValue={defencePoints}
+            otherValueOne={strengthPoints}
+            otherValueTwo={attackPoints}
+            otherValueThree={speedPoints}
+            skillPointsMax={skillPointsMax}
+            skillPointsMaxLevel={skillPointsMaxLevel}
+            onUpdateCallBack={(value) => this.defenceCallBack(value)}
+          />
+
+          <SliderWithRules
+            labelText="Speed"
+            myValue={speedPoints}
+            otherValueOne={strengthPoints}
+            otherValueTwo={attackPoints}
+            otherValueThree={defencePoints}
+            skillPointsMax={skillPointsMax}
+            skillPointsMaxLevel={skillPointsMaxLevel}
+            onUpdateCallBack={(value) => this.speedCallBack(value)}
+          />
+
+          {formLoading && (
+            <div className="grid-form-items form-item-center">
+              <CircularProgress size={24} />
+            </div>
+          )}
+
+          <Button
+            variant="contained"
+            color="primary"
+            className="grid-form-items"
+            type="submit"
+            disabled={formLoading}
+          >
+            Create {creatureName}
+          </Button>
+        </form>
+      </Fragment>
     );
   }
 }

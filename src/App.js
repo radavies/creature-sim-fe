@@ -6,8 +6,9 @@ import { AppBar, Toolbar, IconButton } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
 import { makeStyles } from '@material-ui/core/styles';
 
-import Home from './pages/home/Home';
-import Create from './pages/create/Create';
+import Home from './pages/Home';
+import Create from './pages/Create';
+import World from './pages/World';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,6 +47,7 @@ const App = () => {
         <Router>
           <Home path="/" />
           <Create path="/create" />
+          <World path="/world" />
         </Router>
       </div>
     </Fragment>
