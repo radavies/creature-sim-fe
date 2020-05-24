@@ -17,7 +17,13 @@ body {
   grid-template-columns: 1fr;
 }
 
-@media only screen and (max-width: 800px) {
+.world-container {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  margin: 2rem 10rem;
+}
+
+@media only screen and (max-width: 960px) {
   .main-container {
     grid-template-columns: 1fr;
     margin: 2rem;
@@ -25,6 +31,10 @@ body {
 
   .form-container {
     grid-template-columns: 1fr;
+  }
+
+  .world-container {
+    margin: 2rem 5rem;
   }
 }
 
@@ -62,7 +72,7 @@ form .form-item-center {
   text-align: center;
 }
 
-@media only screen and (max-width: 800px) {
+@media only screen and (max-width: 960px) {
   .grid-center {
     grid-column-start: 1;
   }

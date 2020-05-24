@@ -25,4 +25,11 @@ function CreateCreature(
     .catch(errorFunction);
 }
 
-export default CreateCreature;
+function GetCreatures(successFunction, errorFunction) {
+  axios
+    .get(baseUrl + '/creatures')
+    .then(successFunction)
+    .catch(errorFunction);
+}
+
+export { CreateCreature, GetCreatures };
