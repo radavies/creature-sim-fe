@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Button, TextField, CircularProgress } from '@material-ui/core';
 import { navigate } from '@reach/router';
 
-import CreateCreature from '../utils/Network';
+import { CreateCreature } from '../utils/Network';
 
 import CreatureAvatar from './CreatureAvatar';
 import SliderWithRules from './SliderWithRules';
