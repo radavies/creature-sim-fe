@@ -10,6 +10,7 @@ body {
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
   margin-top: 2rem;
+  min-height: 50vh;
 }
 
 .form-container {
@@ -100,6 +101,16 @@ form .form-item-center {
 
 .formError {
   color: #f44336;
+}
+
+.header-icon-text {
+  font-size: 1rem;
+  margin-left: 0.5rem;
+}
+
+.header-title {
+  width: 100%;
+  text-align: right;
 }
 
 /*Docs https://material-ui.com/*/
