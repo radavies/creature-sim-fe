@@ -12,8 +12,8 @@ class Home extends Component {
           <h1>Creature Sim Project - Raymond Davies</h1>
           <h2>About Me</h2>
           <p>
-            Hello, I'm <b>Raymond Davies</b>, a software engineer / engineering
-            manager from Edinburgh, Scotland. I work at{' '}
+            Hello, I&apos;m <b>Raymond Davies</b>, a software engineer /
+            engineering manager from Edinburgh, Scotland. I work at{' '}
             <a
               href="https://www.skyscanner.net/"
               target="_blank"
@@ -86,9 +86,9 @@ class Home extends Component {
           </p>
           <h2>About This Project</h2>
           <p>
-            This project, Creature Sim, is based on an idea I've played with a
-            lot over the years. The first iteration of the idea was actually my
-            final year project at university.
+            This project, Creature Sim, is based on an idea I&apos;ve played
+            with a lot over the years. The first iteration of the idea was
+            actually my final year project at university.
           </p>
           <p>
             The core of the idea is combine a MMO game concept with a
@@ -101,8 +101,8 @@ class Home extends Component {
           <p>
             The main purpose of the project, aside from being an enjoyable
             challenge, is to allow me to play with, learn and explore different
-            technologies. As such the tech choices I've made have been primarily
-            driven by one of those factors.
+            technologies. As such the tech choices I&apos;ve made have been
+            primarily driven by one of those factors.
           </p>
           <p>
             I would also like the project to be a portfolio item that can

@@ -222,7 +222,7 @@ class CreateForm extends Component {
   }
 
   submitFormSuccess(response) {
-    navigate(`/world?creature=${response.data}`);
+    navigate(`/world?creature=${response.data.CreatureId}`);
   }
 
   submitFormError() {
