@@ -7,12 +7,12 @@ const CreatureList = ({ creatures }) => {
         <span>No Creatures</span>
       ) : (
         creatures.map((creature) => (
-          <div key={creature.id}>
+          <div key={creature.creatureId}>
             <img
-              alt={creature.name}
+              alt={creature.creatureName}
               src={`https://www.gravatar.com/avatar/${creature.avatarHash}?d=monsterid&s=50`}
             />
-            <span>{creature.name}</span>
+            <span>{creature.creatureName}</span>
           </div>
         ))
       )}

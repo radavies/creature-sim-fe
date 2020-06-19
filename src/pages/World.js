@@ -18,7 +18,7 @@ class World extends Component {
       creatures: [],
       world: [],
     };
-    this.getCreaturesSuccess = this.getCreaturesError.bind(this);
+    this.getCreaturesSuccess = this.getCreaturesSuccess.bind(this);
     this.getCreaturesError = this.getCreaturesError.bind(this);
     this.getWorldSuccess = this.getWorldSuccess.bind(this);
     this.getWorldError = this.getWorldError.bind(this);
@@ -41,7 +41,8 @@ class World extends Component {
   }
 
   getCreaturesError() {
-    this.setState({ creatures: fakeCreatureData });
+    //this.setState({ creatures: fakeCreatureData });
+    this.setState({ creatures: [] });
   }
 
   getWorldSuccess(response) {
