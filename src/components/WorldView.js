@@ -1,12 +1,31 @@
-import React, { Component } from 'react';
+import React, { Fragment } from 'react';
 
-class WorldView extends Component {
-  constructor(props) {
-    super(props);
-  }
+const WorldView = ({ world }) => {
+  return (
+    <div className="world-map-container">
+      {world.length === 0 ? (
+        <Fragment>
+          <div>Failed to load world.</div>
+          <div></div>
+          <div>Please try again.</div>
+        </Fragment>
+      ) : (
+        buildMap(world)
+      )}
+    </div>
+  );
+};
 
-  render() {
-    return <div>World Goes Here</div>;
-  }
+function buildMap(world) {
+  return world.world.map((mapRow) =>
+    mapRow.terrain.map((cell) => (
+      <div
+        id={cell.key}
+        key={cell.key}
+        className={`map-cell ${cell.type}`}
+      ></div>
+    ))
+  );
 }
+
 export default WorldView;

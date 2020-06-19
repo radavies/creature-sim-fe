@@ -109,6 +109,26 @@ class Home extends Component {
             demonstrate my hands-on expertise with a variety of technologies.
           </p>
           <h3>Tech Stack</h3>
+          <p>
+            If you want to see how the project works in detail can find the code
+            for the{' '}
+            <a
+              href="https://github.com/radavies/creature-sim-fe"
+              target="_blank"
+              rel="noreferrer"
+            >
+              frontend
+            </a>{' '}
+            and{' '}
+            <a
+              href="https://github.com/radavies/creature-sim-api"
+              target="_blank"
+              rel="noreferrer"
+            >
+              backend
+            </a>{' '}
+            over at github.
+          </p>
           <h4>Front End</h4>
           <ul>
             <li>
@@ -163,6 +183,15 @@ class Home extends Component {
             <li>
               <a href="https://gradle.org/" target="_blank" rel="noreferrer">
                 Gradle
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://docs.aws.amazon.com/sdk-for-java/v2/developer-guide/welcome.html"
+                target="_blank"
+                rel="noreferrer"
+              >
+                AWS SDK for Java V2
               </a>
             </li>
           </ul>

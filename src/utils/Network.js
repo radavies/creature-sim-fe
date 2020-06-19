@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = 'http://localhost:8080';
+const baseUrl = 'http://192.168.1.110:8080';
 
 function CreateCreature(
   creatureName,
@@ -26,10 +26,18 @@ function CreateCreature(
 }
 
 function GetCreatures(successFunction, errorFunction) {
+  MakeGetRequest('/creatures', successFunction, errorFunction);
+}
+
+function GetWorld(successFunction, errorFunction) {
+  MakeGetRequest('/world', successFunction, errorFunction);
+}
+
+function MakeGetRequest(path, successFunction, errorFunction) {
   axios
-    .get(baseUrl + '/creatures')
+    .get(baseUrl + path)
     .then(successFunction)
     .catch(errorFunction);
 }
 
-export { CreateCreature, GetCreatures };
+export { CreateCreature, GetCreatures, GetWorld };

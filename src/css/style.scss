@@ -4,7 +4,7 @@ body {
   color: rgba(0, 0, 0, 0.87);
 }
 
-/*Grid Container*/
+/*Grid Stuff*/
 
 .main-container {
   display: grid;
@@ -46,10 +46,44 @@ body {
   }
 }
 
-.world-container {
+.world-page-container {
   display: grid;
   grid-template-columns: 1fr 2fr;
   margin: 2rem 10rem;
+
+  .world-map-container {
+    display: grid;
+    //width: 100%;
+    grid-template-columns: repeat(10, 50px);
+    grid-template-rows: repeat(10, 50px);
+    justify-self: center;
+    align-self: center;
+    border-bottom: 1px solid #a0b3ab;
+    border-left: 1px solid #a0b3ab;
+
+    .map-cell {
+      border-top: 1px solid #a0b3ab;
+      border-right: 1px solid #a0b3ab;
+      &.M {
+        background-color: #879a92;
+      }
+      &.H {
+        background-color: #b7cc6a;
+      }
+
+      &.P {
+        background-color: #278219;
+      }
+
+      &.D {
+        background-color: #f1b81a;
+      }
+
+      &.W {
+        background-color: #0b589e;
+      }
+    }
+  }
 }
 
 @media only screen and (max-width: 960px) {
@@ -68,12 +102,31 @@ body {
     grid-template-columns: 1fr;
   }
 
-  .world-container {
+  .world-page-container {
+    grid-template-columns: 1fr;
     margin: 2rem 5rem;
+
+    .creature-list {
+      grid-row-start: 2;
+      margin: 2rem 0rem;
+    }
   }
 }
 
-/*Grid Items*/
+@media only screen and (max-width: 700px) {
+  .world-page-container {
+    margin: 0rem 0rem;
+    .world-map-container {
+      grid-template-columns: repeat(10, 10vmin);
+      grid-template-rows: repeat(10, 10vmin);
+    }
+    .creature-list {
+      margin: 2rem 2rem;
+    }
+  }
+}
+
+/*Other Stuff*/
 form {
   .grid-form-items {
     justify-self: left;
@@ -94,7 +147,6 @@ form {
   }
 }
 
-/*Other Stuff*/
 .header-icon-text {
   font-size: 1rem;
   margin-left: 0.5rem;
