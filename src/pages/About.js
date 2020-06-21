@@ -91,7 +91,7 @@ class Home extends Component {
             actually my final year project at university.
           </p>
           <p>
-            The core of the idea is combine a MMO game concept with a
+            The core of the idea is to combine a MMO game concept with a
             predator-prey simulation. Users of the system can create, and to a
             small extent manage, creatures within a virtual world. My hope is
             that within the virtual world there will be emergent properties that
@@ -108,6 +108,15 @@ class Home extends Component {
             I would also like the project to be a portfolio item that can
             demonstrate my hands-on expertise with a variety of technologies.
           </p>
+          <h3>Project Structure</h3>
+          <p>
+            The project consists of a React front end communicating with a Java
+            Dropwizard API.
+          </p>
+          <p>
+            There is also a Lambda function which runs on a schedule to update
+            the game world.
+          </p>
           <h3>Tech Stack</h3>
           <p>
             If you want to see how the project works in detail can find the code
@@ -119,13 +128,21 @@ class Home extends Component {
             >
               frontend
             </a>{' '}
-            and{' '}
+            ,{' '}
             <a
               href="https://github.com/radavies/creature-sim-api"
               target="_blank"
               rel="noreferrer"
             >
-              backend
+              backend API
+            </a>{' '}
+            and{' '}
+            <a
+              href="https://github.com/radavies/creature-sim-lambda"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Lambda function
             </a>{' '}
             over at github.
           </p>
@@ -213,6 +230,15 @@ class Home extends Component {
                 rel="noreferrer"
               >
                 DynamoDB
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://aws.amazon.com/lambda/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                AWS Lambda
               </a>
             </li>
           </ul>
